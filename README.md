@@ -1,5 +1,6 @@
 **Rice Crop Disease Detection Using CNN and VIT Models for Agriculture Drone**
 
+______________________________________________________________________________________________________________________
 
 1. git clone https://github.com/Nimisha-James/Rice_Crop_Disease_Detection_Using_CNN_and_VIT_for_Agricultural_Drone 
 2. cd Rice_Crop_Disease_Detection_Using_CNN_and_VIT_for_Agricultural_Drone
