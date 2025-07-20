@@ -2,3 +2,5 @@ torchvision
 matplotlib
 pillow
 matplotlib
+torch 
+timm
