@@ -54,6 +54,7 @@ val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False, num_workers=2
 test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False, num_workers=2)
 num_classes = len(train_dataset.classes)
 
+
 # ✅ Custom CNN-ViT Hybrid Model
 class PatchEmbed(nn.Module):
     def __init__(self, in_channels=128, patch_size=16, embed_dim=256):
@@ -86,10 +87,10 @@ class CNNViTHybrid(nn.Module):
     def __init__(self, num_classes):
         super().__init__()
         self.cnn = nn.Sequential(
-            nn.Conv2d(3, 32, kernel_size=3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
-            nn.Conv2d(32, 64, kernel_size=3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
-            nn.Conv2d(64, 128, kernel_size=3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
-            nn.Conv2d(128, 256, kernel_size=3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
+            nn.Conv2d(3, 32, kernel_size=3, padding=1), nn.BatchNorm2d(32), nn.ReLU(), nn.MaxPool2d(2),
+            nn.Conv2d(32, 64, kernel_size=3, padding=1), nn.BatchNorm2d(64), nn.ReLU(), nn.MaxPool2d(2),
+            nn.Conv2d(64, 128, kernel_size=3, padding=1), nn.BatchNorm2d(128),nn.ReLU(), nn.MaxPool2d(2),
+            nn.Conv2d(128, 256, kernel_size=3, padding=1), nn.BatchNorm2d(256), nn.ReLU(), nn.MaxPool2d(2),
         )
 
         self.patch_embed = PatchEmbed(in_channels=256, patch_size=8, embed_dim=256)
@@ -105,7 +106,7 @@ class CNNViTHybrid(nn.Module):
 model = CNNViTHybrid(num_classes=num_classes).to(device)
 
 # ✅ Loss & Optimizer
-criterion = nn.CrossEntropyLoss(label_smoothing=0.05)
+criterion = nn.CrossEntropyLoss(label_smoothing=0.01)
 optimizer = optim.Adam(model.parameters(), lr=1e-4)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max', factor=0.5, patience=3, verbose=True)
 
@@ -162,13 +163,13 @@ for epoch in range(50):
     val_acc = evaluate(val_loader)
     scheduler.step(val_acc)
 
-
 # ✅ Save Model
 torch.save(model.state_dict(), "cnn_vit_hybrid.pt")
 print("Model saved.")
 
 # ✅ Final Test
 y_true, y_pred = evaluate(test_loader, name="Test", collect_preds=True)
+
 
 # ✅ Accuracy / Loss Plot
 plt.figure(figsize=(8, 5))
@@ -183,8 +184,8 @@ plt.grid(True)
 plt.tight_layout()
 plt.savefig("accuracy_loss_curve.png")
 
-# ✅ Confusion Matrix
 
+# ✅ Confusion Matrix
 cm = confusion_matrix(y_true, y_pred)
 plt.figure(figsize=(10, 10))
 sns.heatmap(cm, annot=True, fmt='d', cmap='OrRd',
@@ -199,10 +200,10 @@ plt.xticks(rotation=45)
 plt.tight_layout()
 plt.savefig("confusion_matrix.png")
 
+
 # ✅ Classification Report
 report = classification_report(y_true, y_pred, target_names=test_dataset.classes, digits=4)
 print("\nClassification Report:\n", report)
 with open("classification_report.txt", "w") as f:
     f.write(report)
-
 

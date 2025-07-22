@@ -1,14 +1,14 @@
                        precision    recall  f1-score   support
 
-    Brown spot fungal     0.9048    0.9096    0.9072       188
-        Damaged pests     0.9668    0.9790    0.9729       238
-  Downy mildew fungal     0.9467    0.9143    0.9302       175
-              Healthy     0.9569    0.9173    0.9367       266
-          Hispa pests     0.9122    0.9755    0.9428       245
-Leaf Streak bacterial     0.9427    0.9487    0.9457       156
-Leaf blight bacterial     0.9264    0.9264    0.9264       163
-         Tungro viral     0.9573    0.9352    0.9461       216
+    Brown spot fungal     0.9465    0.9415    0.9440       188
+        Damaged pests     0.9789    0.9748    0.9768       238
+  Downy mildew fungal     0.9477    0.9314    0.9395       175
+              Healthy     0.9483    0.9662    0.9572       266
+          Hispa pests     0.9551    0.9551    0.9551       245
+Leaf Streak bacterial     0.9329    0.9808    0.9563       156
+Leaf blight bacterial     0.9868    0.9202    0.9524       163
+         Tungro viral     0.9406    0.9537    0.9471       216
 
-             accuracy                         0.9399      1647
-            macro avg     0.9392    0.9382    0.9385      1647
-         weighted avg     0.9403    0.9399    0.9398      1647
+             accuracy                         0.9545      1647
+            macro avg     0.9546    0.9530    0.9535      1647
+         weighted avg     0.9548    0.9545    0.9544      1647
