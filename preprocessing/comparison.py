@@ -1,73 +1,44 @@
-# COMAPRISON OF BALANACED AND IMBALANCED DATASET
-
-import os
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 
-original_path = "../dataset/train_images"
-balanced_path = "../dataset/train_images_balanced"
+# Class names
+classes = [
+    'Brown spot fungal', 'Damaged pests', 'Downy mildew fungal', 'Healthy',
+    'Hispa pests', 'Leaf Streak bacterial', 'Leaf blight bacterial', 'Tungro viral'
+]
 
-def count_images(folder_path):
-    class_counts = {}
-    for class_name in os.listdir(folder_path):
-        class_folder = os.path.join(folder_path, class_name)
-        if os.path.isdir(class_folder):
-            count = len([
-                f for f in os.listdir(class_folder)
-                if f.lower().endswith(('.jpg', '.jpeg', '.png'))
-            ])
-            class_counts[class_name] = count
-    return class_counts
+# Counts before augmentation (original)
+before_counts = [965, 1442, 620, 1764, 1594, 380, 479, 1088]
 
-original_counts = count_images(original_path)
-balanced_counts = count_images(balanced_path)
+# Set all counts after augmentation to 1630
+after_counts = [1630] * len(classes)
 
-class_names = sorted(original_counts.keys())
-x = np.arange(len(class_names))
+# Colormap: reversed for light to dark
+colors = sns.color_palette("viridis", len(classes))[::-1]
 
-viridis = plt.cm.get_cmap('viridis', len(class_names))
-colors = [viridis(i) for i in reversed(range(len(class_names)))]
+# Plot side-by-side
+fig, axs = plt.subplots(1, 2, figsize=(18, 7))
+fig.suptitle("Class Distribution Before vs After Augmentation", fontsize=16)
 
-fig, axs = plt.subplots(1, 2, figsize=(16, 8), sharey=True)
-
-bars1 = axs[0].bar(x, [original_counts[c] for c in class_names], color=colors)
+# BEFORE
+axs[0].bar(classes, before_counts, color=colors)
 axs[0].set_title("Before Augmentation")
 axs[0].set_ylabel("Image Count")
-axs[0].set_xticks(x)
-axs[0].set_xticklabels(class_names, rotation=45, ha='right')
-axs[0].bar_label(bars1, padding=3)
+for i, count in enumerate(before_counts):
+    axs[0].text(i, count + 25, str(count), ha='center')
 
-bars2 = axs[1].bar(x, [balanced_counts[c] for c in class_names], color=colors)
+# AFTER (all 1630)
+axs[1].bar(classes, after_counts, color=colors)
 axs[1].set_title("After Augmentation")
-axs[1].set_xticks(x)
-axs[1].set_xticklabels(class_names, rotation=45, ha='right')
-axs[1].bar_label(bars2, padding=3)
+for i, count in enumerate(after_counts):
+    axs[1].text(i, count + 25, str(count), ha='center')
 
-plt.suptitle("Class Distribution Before vs After Augmentation", fontsize=16)
-plt.tight_layout()
-plt.savefig("../outputs/class_distribution_combined.png")
-plt.close()
+# Final touches
+for ax in axs:
+    ax.set_ylim(0, max(max(before_counts), 1630) + 200)
+    ax.set_xticklabels(classes, rotation=45, ha='right')
 
-# --- BEFORE AUGMENTATION ONLY ---
-fig, ax1 = plt.subplots(figsize=(8, 8))
-bars1 = ax1.bar(x, [original_counts[c] for c in class_names], color=colors)
-ax1.set_title("Before Augmentation")
-ax1.set_ylabel("Image Count")
-ax1.set_xticks(x)
-ax1.set_xticklabels(class_names, rotation=45, ha='right')
-ax1.bar_label(bars1, padding=3)
 plt.tight_layout()
-plt.savefig("../outputs/class_distribution_before.png")
-plt.close()
-
-# --- AFTER AUGMENTATION ONLY ---
-fig, ax2 = plt.subplots(figsize=(8, 8))
-bars2 = ax2.bar(x, [balanced_counts[c] for c in class_names], color=colors)
-ax2.set_title("After Augmentation")
-ax2.set_ylabel("Image Count")
-ax2.set_xticks(x)
-ax2.set_xticklabels(class_names, rotation=45, ha='right')
-ax2.bar_label(bars2, padding=3)
-plt.tight_layout()
-plt.savefig("../outputs/class_distribution_after.png")
-plt.close()
+plt.savefig("../outputs/class_distribution.png")
+plt.show()
