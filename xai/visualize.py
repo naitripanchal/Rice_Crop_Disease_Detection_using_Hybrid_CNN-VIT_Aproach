@@ -80,7 +80,7 @@ class CNNViTHybrid(nn.Module):
 
 # ==== CONFIG ====
 model_path = "../custom_cnn_vit/cnn_vit_hybrid.pt"   # Your trained model path
-image_path = "3.jpg"                                 # Test image
+image_path = "2.jpg"                                 # Test image
 num_classes = 8                                      # As per your trained model
 
 # ==== LOAD MODEL ====
@@ -109,7 +109,7 @@ grayscale_cam = cam(input_tensor=input_tensor, targets=targets)[0]
 gradcam_image = show_cam_on_image(rgb_image.astype(np.float32), grayscale_cam, use_rgb=True)
 
 # ==== SAVE Grad-CAM OUTPUT ====
-cv2.imwrite("../outputs/gradcam_leaf3.png", cv2.cvtColor(gradcam_image, cv2.COLOR_RGB2BGR))
+cv2.imwrite("../outputs/gradcam_leaf2.png", cv2.cvtColor(gradcam_image, cv2.COLOR_RGB2BGR))
 print("✅ Saved Grad-CAM++: ../outputs/gradcam_leaf.png")
 
 # ==== ATTENTION MAP (CLS → Patches) ====
@@ -138,5 +138,5 @@ plt.title("Transformer Attention (CLS to Patches)")
 plt.axis("off")
 plt.colorbar()
 plt.tight_layout()
-plt.savefig("../outputs/attention_map3.png")
+plt.savefig("../outputs/attention_map2.png")
 print("✅ Saved Attention Map: ../outputs/attention_map.png")

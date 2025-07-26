@@ -17,22 +17,24 @@ after_counts = [1630] * len(classes)
 # Colormap: reversed for light to dark
 colors = sns.color_palette("viridis", len(classes))[::-1]
 
+x_positions = np.arange(len(classes)) * 0.7
+
 # Plot side-by-side
-fig, axs = plt.subplots(1, 2, figsize=(18, 7))
+fig, axs = plt.subplots(1, 2, figsize=(11, 6))
 fig.suptitle("Class Distribution Before vs After Augmentation", fontsize=16)
 
 # BEFORE
-axs[0].bar(classes, before_counts, color=colors)
+axs[0].bar(x_positions, before_counts, color=colors, width=0.5)
 axs[0].set_title("Before Augmentation")
 axs[0].set_ylabel("Image Count")
 for i, count in enumerate(before_counts):
-    axs[0].text(i, count + 25, str(count), ha='center')
+     axs[0].text(x_positions[i], count + 25, str(count), ha='center', va='bottom', fontsize=10)
 
 # AFTER (all 1630)
-axs[1].bar(classes, after_counts, color=colors)
+axs[1].bar(x_positions, after_counts, color=colors, width=0.5)
 axs[1].set_title("After Augmentation")
 for i, count in enumerate(after_counts):
-    axs[1].text(i, count + 25, str(count), ha='center')
+     axs[1].text(x_positions[i], count + 25, str(count), ha='center', va='bottom', fontsize=10)
 
 # Final touches
 for ax in axs:
